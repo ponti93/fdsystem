@@ -185,7 +185,8 @@ def get_transaction(transaction_id: str, db: Session = Depends(get_database)):
     try:
         result = transaction_processor.get_transaction_details(transaction_id, db)
         if not result:
-    raise HTTPException(status_code=404, detail="Transaction not found")
+
+            raise HTTPException(status_code=404, detail="Transaction not found")
         
         return admin_handler.format_response(result)
     except HTTPException:
@@ -212,24 +213,24 @@ def get_stats(db: Session = Depends(get_database)):
 def run_test_scenarios(db: Session = Depends(get_database)):
     """Run predefined test scenarios"""
     try:
-    scenarios = [
+        scenarios = [
             {'amount': 50000, 'user_id': 1, 'merchant_id': 'Coffee Shop', 'description': 'Normal transaction'},
             {'amount': 150000, 'user_id': 2, 'merchant_id': 'Electronics Store', 'description': 'Medium amount'},
             {'amount': 600000, 'user_id': 3, 'merchant_id': 'Luxury Store', 'description': 'High amount'},
             {'amount': 1000000, 'user_id': 1, 'merchant_id': 'Car Dealer', 'description': 'Round amount (1M)'},
             {'amount': 100000, 'user_id': 2, 'merchant_id': 'Casino Resort', 'description': 'Risky merchant'},
             {'amount': 2000000, 'user_id': 3, 'merchant_id': 'Real Estate', 'description': 'Very high amount'}
-    ]
-    
-    results = []
-    for scenario in scenarios:
+        ]
+        
+        results = []
+        for scenario in scenarios:
             result = process_transaction(scenario, db)
             result['description'] = scenario['description']
             results.append(result)
         
         return admin_handler.format_response({
-        'message': f'Generated {len(results)} test transactions',
-        'results': results
+            'message': f'Generated {len(results)} test transactions',
+            'results': results
         })
     except Exception as e:
         return admin_handler.handle_error(e, "run_test_scenarios")
