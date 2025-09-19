@@ -1,0 +1,336 @@
+/* Simple Fraud Detection System Styles */
+
+.App {
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.App-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.App-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+}
+
+.App-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Statistics Dashboard */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.stat-card.approved {
+  border-color: #28a745;
+}
+
+.stat-card.approved .stat-value {
+  color: #28a745;
+}
+
+.stat-card.declined {
+  border-color: #dc3545;
+}
+
+.stat-card.declined .stat-value {
+  color: #dc3545;
+}
+
+.stat-card.review {
+  border-color: #ffc107;
+}
+
+.stat-card.review .stat-value {
+  color: #ffc107;
+}
+
+/* Test Interface */
+.test-container {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.test-container h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.test-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: end;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: #5a6fd8;
+}
+
+button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background: #dc3545;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background: #c82333;
+}
+
+/* Quick Tests */
+.quick-tests {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.quick-tests h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.quick-tests button {
+  margin: 5px;
+  background: #6c757d;
+  font-size: 0.9rem;
+  padding: 8px 15px;
+}
+
+.quick-tests button:hover {
+  background: #5a6268;
+}
+
+/* Transaction Results */
+.results-container {
+  text-align: left;
+}
+
+.results-container h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 50px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.transactions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.transaction-card {
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.transaction-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.tx-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.tx-id {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.risk-badge {
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.tx-details {
+  margin-bottom: 15px;
+}
+
+.tx-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.tx-merchant {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 5px;
+}
+
+.tx-user {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.tx-analysis {
+  margin-bottom: 15px;
+}
+
+.decision {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.fraud-score {
+  font-size: 1rem;
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.rules-triggered {
+  margin-top: 10px;
+}
+
+.rules-triggered strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #495057;
+}
+
+.rules-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.rule-tag {
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.tx-timestamp {
+  font-size: 0.8rem;
+  color: #6c757d;
+  border-top: 1px solid #dee2e6;
+  padding-top: 10px;
+  margin-top: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+  
+  .test-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .transactions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

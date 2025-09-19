@@ -1,0 +1,44 @@
+services:
+  # Single Docker service containing both frontend and backend
+  - type: web
+    name: fraud-detection-system
+    env: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      # Database connection (will be updated when migrating to Render PostgreSQL)
+      - key: DATABASE_HOST
+        value: localhost
+      - key: DATABASE_PORT  
+        value: 5432
+      - key: DATABASE_NAME
+        value: fraud_detection_db
+      - key: DATABASE_USER
+        value: postgres
+      - key: DATABASE_PASSWORD
+        value: fraud_detection_password
+      
+      # Flutterwave API keys (update with your real keys)
+      - key: FLUTTERWAVE_PUBLIC_KEY
+        value: FLWPUBK_TEST-SANDBOX-X
+      - key: FLUTTERWAVE_SECRET_KEY
+        value: FLWSECK_TEST-SANDBOX-X  
+      - key: FLUTTERWAVE_ENCRYPTION_KEY
+        value: FLWSECK_TESTENC-SANDBOX-X
+      - key: FLUTTERWAVE_WEBHOOK_HASH
+        value: flutterwave_webhook_secret_123
+      
+      # Application settings
+      - key: PYTHONPATH
+        value: /app
+      - key: TF_ENABLE_ONEDNN_OPTS
+        value: 0
+
+# Note: Database will be added later when migrating from local to Render PostgreSQL
+# databases:
+#   - name: fraud-detection-db
+#     databaseName: fraud_detection_db
+#     user: postgres
+#     region: frankfurt  
+#     plan: free
