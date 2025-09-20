@@ -626,25 +626,25 @@ def health_check():
 
 
 # Serve frontend (React build)
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+#from fastapi.responses import FileResponse
+#from fastapi.staticfiles import StaticFiles
 
-if os.path.exists("./static"):
+#if os.path.exists("./static"):
     # Mount static assets (JS, CSS, images)
-    app.mount("/static", StaticFiles(directory="static"), name="static_assets")
+ #   app.mount("/static", StaticFiles(directory="static"), name="static_assets")
 
-    @app.get("/{full_path:path}")
-    async def serve_react_app(full_path: str):
-        """Serve React app for all non-API routes"""
-        if full_path.startswith("api/") or full_path.startswith("docs"):
-            raise HTTPException(status_code=404, detail="Not Found")
+#    @app.get("/{full_path:path}")
+#    async def serve_react_app(full_path: str):
+#        """Serve React app for all non-API routes"""
+#        if full_path.startswith("api/") or full_path.startswith("docs"):
+#            raise HTTPException(status_code=404, detail="Not Found")
 
-        index_path = "./static/index.html"
-        if os.path.exists(index_path):
-            return FileResponse(index_path)
-        raise HTTPException(status_code=404, detail="Frontend not available")
-else:
-    print("⚠️ Frontend static files not found - running in API-only mode")
+#        index_path = "./static/index.html"
+ #       if os.path.exists(index_path):
+ #           return FileResponse(index_path)
+ #       raise HTTPException(status_code=404, detail="Frontend not available")
+# else:
+#    print("⚠️ Frontend static files not found - running in API-only mode")
 
 
 if __name__ == "__main__":
