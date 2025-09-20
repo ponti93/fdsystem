@@ -633,6 +633,7 @@ def serve_react_app(full_path: str):
 import os
 if os.path.exists("./static"):
     # Mount static assets directory - React expects /static/js/... and /static/css/...
+    # The Docker build copies frontend/build to ./static, so assets are at ./static/static/
     app.mount("/static", StaticFiles(directory="static/static"), name="static_assets")
     print("📱 Frontend will be served from: http://localhost:8000")
     print("📁 Static assets mounted at: /static")
