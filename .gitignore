@@ -48,9 +48,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# React Build
-frontend/build/
-frontend/dist/
+# React Build (excluding from git but allowing for Docker builds)
+# frontend/build/
+# frontend/dist/
 
 # IDE
 .vscode/
