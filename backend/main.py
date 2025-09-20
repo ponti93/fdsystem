@@ -632,8 +632,10 @@ def serve_react_app(full_path: str):
 # Check if static directory exists (for Docker deployment)
 import os
 if os.path.exists("./static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static_assets")
+    # Mount static assets directory - React expects /static/js/... and /static/css/...
+    app.mount("/static", StaticFiles(directory="static/static"), name="static_assets")
     print("📱 Frontend will be served from: http://localhost:8000")
+    print("📁 Static assets mounted at: /static")
 else:
     print("📱 Frontend static files not found - running in API-only mode")
 
