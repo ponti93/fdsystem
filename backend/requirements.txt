@@ -7,7 +7,7 @@ psycopg2-binary==2.9.9
 alembic==1.12.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-multipart==0.0.7
 
 # ML stack compatible with Python 3.12
 tensorflow==2.16.2
