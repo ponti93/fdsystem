@@ -68,10 +68,10 @@ yarn-error.log*
 ehthumbs.db
 Thumbs.db
 
-# ML Models - Allow for deployment (models will be trained if not present)
-# backend/models/*.h5
-# backend/models/*.joblib
-# backend/data/*.csv
+# ML Models (too large for git)
+backend/models/*.h5
+backend/models/*.joblib
+backend/data/*.csv
 
 # Temporary files
 *.tmp
