@@ -612,11 +612,27 @@ def verify_flutterwave_transaction(transaction_id: str):
         logger.error(f"Error verifying transaction: {e}")
         return format_response({'error': str(e)}, 'error')
 
-# Mount static files (React frontend) - this should be LAST
+# Catch-all route for React Router (SPA routing)
+@app.get("/{full_path:path}")
+def serve_react_app(full_path: str):
+    """Serve React app for all non-API routes (SPA routing support)"""
+    # Skip API routes
+    if full_path.startswith("api/") or full_path.startswith("docs"):
+        raise HTTPException(status_code=404, detail="Not Found")
+    
+    # Check if static directory exists
+    if os.path.exists("./static"):
+        # Serve index.html for all other routes (React Router will handle routing)
+        from fastapi.responses import FileResponse
+        return FileResponse("./static/index.html")
+    else:
+        raise HTTPException(status_code=404, detail="Frontend not available")
+
+# Mount static files for assets (CSS, JS, images) - this should be LAST
 # Check if static directory exists (for Docker deployment)
 import os
 if os.path.exists("./static"):
-    app.mount("/", StaticFiles(directory="static", html=True), name="frontend")
+    app.mount("/static", StaticFiles(directory="static"), name="static_assets")
     print("📱 Frontend will be served from: http://localhost:8000")
 else:
     print("📱 Frontend static files not found - running in API-only mode")
