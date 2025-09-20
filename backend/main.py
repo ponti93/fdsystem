@@ -600,52 +600,52 @@ def verify_flutterwave_transaction(transaction_id: str):
     try:
         # In real implementation, this would call Flutterwave API
         # For testing, we'll return mock verification data
-        
         result = {
-            'status': 'success',
-            'data': {
-                'tx_ref': transaction_id,
-                'status': 'successful',
-                'amount': 100000,
-                'currency': 'NGN',
-                'customer': {
-                    'email': 'test@example.com'
+            "status": "success",
+            "data": {
+                "tx_ref": transaction_id,
+                "status": "successful",
+                "amount": 100000,
+                "currency": "NGN",
+                "customer": {
+                    "email": "test@example.com"
                 },
-                'verification_status': 'verified'
-            }
+                "verification_status": "verified",
+            },
         }
-        
         return format_response(result)
     except Exception as e:
         logger.error(f"Error verifying transaction: {e}")
-        return format_response({'error': str(e)}, 'error')
+        return format_response({"error": str(e)}, "error")
 
-# Catch-all route for React Router (SPA routing)
-@app.get("/{full_path:path}")
-def serve_react_app(full_path: str):
-    """Serve React app for all non-API routes (SPA routing support)"""
-    # Skip API routes
-    if full_path.startswith("api/") or full_path.startswith("docs"):
-        raise HTTPException(status_code=404, detail="Not Found")
-    
-    # Check if static directory exists
-    if os.path.exists("./static"):
-        # Serve index.html for all other routes (React Router will handle routing)
-        from fastapi.responses import FileResponse
-        return FileResponse("./static/index.html")
-    else:
-        raise HTTPException(status_code=404, detail="Frontend not available")
 
-# Mount static files for assets (CSS, JS, images) - this should be LAST
-# Check if static directory exists (for Docker deployment)
-import os
+# Health check endpoint (important for Render Docker deploys)
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+
+# Serve frontend (React build)
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 if os.path.exists("./static"):
-    # Mount static assets directory - React expects /static/js/... and /static/css/...
+    # Mount static assets (JS, CSS, images)
     app.mount("/static", StaticFiles(directory="static"), name="static_assets")
-    print("📱 Frontend will be served from: http://localhost:8000")
-    print("📁 Static assets mounted at: /static")
+
+    @app.get("/{full_path:path}")
+    async def serve_react_app(full_path: str):
+        """Serve React app for all non-API routes"""
+        if full_path.startswith("api/") or full_path.startswith("docs"):
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        index_path = "./static/index.html"
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        raise HTTPException(status_code=404, detail="Frontend not available")
 else:
-    print("📱 Frontend static files not found - running in API-only mode")
+    print("⚠️ Frontend static files not found - running in API-only mode")
+
 
 if __name__ == "__main__":
     print("🚀 Starting Advanced Fraud Detection System")
