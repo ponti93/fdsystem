@@ -33,9 +33,6 @@ COPY --from=frontend-build /app/frontend/build ./static
 # Create necessary directories
 RUN mkdir -p models data
 
-# Make startup script executable
-RUN chmod +x startup.sh
-
 # Set environment variables
 ENV PYTHONPATH=/app
 ENV PORT=8000
@@ -47,5 +44,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Start the application with model training if needed
-CMD ["./startup.sh"]
+# Start the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
