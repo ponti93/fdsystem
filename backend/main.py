@@ -26,7 +26,7 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -51,14 +51,16 @@ app.add_middleware(
 # Security
 security = HTTPBearer()
 
+
 # Helper function for consistent response formatting
-def format_response(data: Any, status: str = 'success') -> Dict[str, Any]:
+def format_response(data: Any, status: str = "success") -> Dict[str, Any]:
     """Format API responses consistently"""
     return {
-        'status': status,
-        'timestamp': datetime.now().isoformat(),
-        'data': data
+        "status": status,
+        "timestamp": datetime.now().isoformat(),
+        "data": data
     }
+
 
 # Initialize database on startup
 @app.on_event("startup")
@@ -66,13 +68,13 @@ async def startup_event():
     """Initialize database and load ML models on startup"""
     try:
         logger.info("Initializing fraud detection system...")
-        
+
         # Initialize database
         init_database()
-        
+
         # Create models directory if it doesn't exist
-        os.makedirs('./models', exist_ok=True)
-        
+        os.makedirs("./models", exist_ok=True)
+
         # Try to load ML model
         try:
             if fraud_engine.rnn_model.load_model():
@@ -82,12 +84,13 @@ async def startup_event():
                 logger.info("No pre-trained model found, using rule-based detection")
         except Exception as e:
             logger.warning(f"Could not load existing model: {e}. Using rule-based detection.")
-        
+
         logger.info("Fraud detection system initialized successfully")
-        
+
     except Exception as e:
         logger.error(f"Startup error: {e}")
         raise
+
 
 # Authentication dependency
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
@@ -98,6 +101,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     return user
 
+
 # Public endpoints
 @app.get("/api/info")
 def api_info():
@@ -107,7 +111,7 @@ def api_info():
         "version": "2.0.0",
         "features": [
             "RNN-based fraud detection",
-            "Real-time transaction processing", 
+            "Real-time transaction processing",
             "Payment gateway integration",
             "Advanced analytics and reporting",
             "Rule-based fraud detection",
@@ -115,13 +119,14 @@ def api_info():
         ],
         "endpoints": {
             "transactions": "/api/transactions",
-            "stats": "/api/stats", 
+            "stats": "/api/stats",
             "webhooks": "/api/webhooks",
             "admin": "/api/admin",
             "ml": "/api/ml",
             "docs": "/docs"
         }
     }
+
 
 @app.get("/health")
 def health_check():
@@ -133,6 +138,7 @@ def health_check():
         "ml_model": "loaded" if fraud_engine.rnn_model.model else "not_loaded"
     }
 
+
 # Transaction endpoints
 @app.post("/api/transactions")
 def create_transaction(transaction: Dict[str, Any], db: Session = Depends(get_database)):
@@ -143,41 +149,42 @@ def create_transaction(transaction: Dict[str, Any], db: Session = Depends(get_da
     except Exception as e:
         return admin_handler.handle_error(e, "create_transaction")
 
+
 @app.get("/api/transactions")
 def get_transactions(limit: int = 100, db: Session = Depends(get_database)):
     """Get recent transactions"""
     try:
         transactions = db_manager.get_recent_transactions(db, limit)
-        
-        # Format transactions for response
+
         formatted_transactions = []
         for tx in transactions:
             fraud_assessment = db_manager.get_fraud_assessment(db, tx.transaction_id)
-            
+
             tx_data = {
-                'transaction_id': tx.transaction_id,
-                'user_id': tx.user_id,
-                'amount': float(tx.amount),
-                'currency': tx.currency,
-                'merchant_id': tx.merchant_id,
-                'timestamp': tx.timestamp.isoformat(),
-                'status': tx.transaction_status,
-                'payment_method': tx.payment_method
+                "transaction_id": tx.transaction_id,
+                "user_id": tx.user_id,
+                "amount": float(tx.amount),
+                "currency": tx.currency,
+                "merchant_id": tx.merchant_id,
+                "timestamp": tx.timestamp.isoformat(),
+                "status": tx.transaction_status,
+                "payment_method": tx.payment_method
             }
-            
+
             if fraud_assessment:
-                tx_data['fraud_assessment'] = {
-                    'fraud_score': float(fraud_assessment.fraud_score),
-                    'decision': fraud_assessment.decision,
-                    'risk_factors': fraud_assessment.risk_factors,
-                    'confidence_level': float(fraud_assessment.confidence_level) if fraud_assessment.confidence_level else None
+                tx_data["fraud_assessment"] = {
+                    "fraud_score": float(fraud_assessment.fraud_score),
+                    "decision": fraud_assessment.decision,
+                    "risk_factors": fraud_assessment.risk_factors,
+                    "confidence_level": float(fraud_assessment.confidence_level) if fraud_assessment.confidence_level else None
                 }
-            
+
             formatted_transactions.append(tx_data)
-        
+
         return admin_handler.format_response(formatted_transactions)
     except Exception as e:
         return admin_handler.handle_error(e, "get_transactions")
+
 
 @app.get("/api/transactions/{transaction_id}")
 def get_transaction(transaction_id: str, db: Session = Depends(get_database)):
@@ -185,14 +192,15 @@ def get_transaction(transaction_id: str, db: Session = Depends(get_database)):
     try:
         result = transaction_processor.get_transaction_details(transaction_id, db)
         if not result:
-
             raise HTTPException(status_code=404, detail="Transaction not found")
-        
+
         return admin_handler.format_response(result)
     except HTTPException:
         raise
     except Exception as e:
         return admin_handler.handle_error(e, "get_transaction")
+
+
 
 @app.get("/api/stats")
 def get_stats(db: Session = Depends(get_database)):
@@ -633,8 +641,7 @@ def serve_react_app(full_path: str):
 import os
 if os.path.exists("./static"):
     # Mount static assets directory - React expects /static/js/... and /static/css/...
-    # The Docker build copies frontend/build to ./static, so assets are at ./static/static/
-    app.mount("/static", StaticFiles(directory="static/static"), name="static_assets")
+    app.mount("/static", StaticFiles(directory="static"), name="static_assets")
     print("📱 Frontend will be served from: http://localhost:8000")
     print("📁 Static assets mounted at: /static")
 else:
