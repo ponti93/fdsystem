@@ -99,9 +99,9 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     return user
 
 # Public endpoints
-@app.get("/")
-def root():
-    """API root endpoint"""
+@app.get("/api/info")
+def api_info():
+    """API information endpoint"""
     return {
         "message": "Advanced Fraud Detection System API",
         "version": "2.0.0",
